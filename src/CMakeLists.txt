@@ -119,6 +119,7 @@ add_executable(sample ../sample/sample.cpp)
 find_package(PythonLibs)
 target_link_libraries(sample edges_pose_refiner
                              ${PYTHON_LIBRARIES}
+                             ${Boost_LIBRARIES}
                              ${PCL_LIBRARIES}
 )
 
@@ -241,9 +242,9 @@ endif()
 add_executable(runDetectionOnDataset apps/runDetectionOnDataset.cpp)
 set_target_properties(runDetectionOnDataset PROPERTIES
     COMPILE_FLAGS "-fopenmp"
-    LINK_FLAGS "-fopenmp"
+    LINK_FLAGS "-fopenmp -lboost_thread"
 )
-target_link_libraries(runDetectionOnDataset edges_pose_refiner)
+target_link_libraries(runDetectionOnDataset edges_pose_refiner ${Boost_LIBRARIES})
 
 #add_executable(writeVideo apps/writeVideo.cpp)
 #target_link_libraries(writeVideo ${OpenCV_LIBRARIES})
