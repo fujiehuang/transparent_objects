@@ -241,7 +241,7 @@ void TODBaseImporter::importTestIndices(vector<int> &testIndices) const
   std::ifstream fin(imagesList.c_str());
   if (!fin.is_open())
   {
-    CV_Error(CV_StsError, "Cannot open the file " + imagesList);
+    CV_Error(cv::Error::StsError, "Cannot open the file " + imagesList);
   }
   while(!fin.eof())
   {
@@ -260,7 +260,7 @@ void TODBaseImporter::importDepth(const std::string &filename, cv::Mat &depth)
   FileStorage fs(filename, FileStorage::READ);
   if (!fs.isOpened())
   {
-    CV_Error(CV_StsBadArg, "Cannot open the file " + filename);
+    CV_Error(cv::Error::StsBadArg, "Cannot open the file " + filename);
   }
   fs["depth_image"] >> depth;
   fs.release();
@@ -276,10 +276,10 @@ void TODBaseImporter::importDepth(int testImageIdx, cv::Mat &depth) const
 
 void TODBaseImporter::importBGRImage(const std::string &filename, cv::Mat &bgrImage)
 {
-  bgrImage = imread(filename, CV_LOAD_IMAGE_UNCHANGED);
+  bgrImage = imread(filename, cv::IMREAD_UNCHANGED);
   if (bgrImage.empty())
   {
-    CV_Error(CV_StsBadArg, "Cannot read the image " + filename);
+    CV_Error(cv::Error::StsBadArg, "Cannot read the image " + filename);
   }
 }
 
@@ -395,7 +395,7 @@ void TODBaseImporter::importRegistrationMask(cv::Mat &registrationMask) const
 
 void TODBaseImporter::importRegistrationMask(const std::string &filename, cv::Mat &registrationMask)
 {
-  registrationMask = imread(filename, CV_LOAD_IMAGE_GRAYSCALE);
+  registrationMask = imread(filename, cv::IMREAD_GRAYSCALE);
   CV_Assert(!registrationMask.empty());
 }
 

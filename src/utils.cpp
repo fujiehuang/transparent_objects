@@ -132,7 +132,7 @@ void mask2contour(const cv::Mat &mask, std::vector<cv::Point2f> &contour)
 {
   Mat maskClone = mask.clone();
   vector<vector<Point> > allContours;
-  findContours(maskClone, allContours, CV_RETR_LIST, CV_CHAIN_APPROX_NONE);
+  findContours(maskClone, allContours, cv::RETR_LIST, cv::CHAIN_APPROX_NONE);
 
   contour.clear();
   for (size_t i = 0; i < allContours.size(); ++i)
@@ -215,12 +215,12 @@ cv::Mat drawSegmentation(const cv::Mat &image, const cv::Mat &mask, const Scalar
   }
   else
   {
-    cvtColor(image, drawImage, CV_GRAY2BGR);
+    cvtColor(image, drawImage, cv::COLOR_GRAY2BGR);
   }
 
   Mat glassMask = mask.clone();
   vector<vector<Point> > contours;
-  findContours(glassMask, contours, CV_RETR_LIST, CV_CHAIN_APPROX_NONE);
+  findContours(glassMask, contours, cv::RETR_LIST, cv::CHAIN_APPROX_NONE);
   drawContours(drawImage, contours, -1, color, thickness);
   return drawImage;
 }
@@ -237,7 +237,7 @@ vector<Mat> drawEdgels(const std::vector<cv::Mat> &images, const vector<Point3f>
   {
     if (images[i].channels() == 1)
     {
-      cvtColor(images[i], drawImages[i], CV_GRAY2BGR);
+      cvtColor(images[i], drawImages[i], cv::COLOR_GRAY2BGR);
     }
     else
     {
@@ -516,7 +516,8 @@ cv::Mat getInvalidDepthMask(const cv::Mat &depthMat, const cv::Mat &registration
   invalidDepthMask.setTo(0, registrationMask);
   return invalidDepthMask;
 }
-
+#include <opencv2/core/types_c.h>
+#include <opencv2/core/core_c.h>
 void computeOrientations(const cv::Mat &edges, cv::Mat &orientationsImage)
 {
 //  imshow("input edges", edges);
@@ -541,7 +542,7 @@ void computeOrientations(const cv::Mat &edges, cv::Mat &orientationsImage)
 //  imshow("wide", edgesWideImage);
 //  waitKey();
 
-  IplImage edge_img = edgesImage;
+  IplImage edge_img = cvIplImage(edgesImage);
   IplImage *dist_img = cvCreateImage(cvSize(edge_img.width, edge_img.height), IPL_DEPTH_32F, 1);
   cvSetZero(dist_img);
   IplImage *annotated_img = cvCreateImage(cvSize(edge_img.width, edge_img.height), IPL_DEPTH_32S, 2);
@@ -654,7 +655,7 @@ void imshow3d(const std::string &windowName, const cv::Mat &image3d)
   destroyWindow(windowName);
 
   CV_Assert(image3d.dims == 3);
-  namedWindow(windowName, CV_WINDOW_NORMAL);
+  namedWindow(windowName, cv::WINDOW_NORMAL);
   int count = image3d.size.p[0] - 1;
 
   //TODO: clear data when closing a window
@@ -689,12 +690,12 @@ struct ManualContourMarkingData
 static void onMouse(int event, int x, int y, int, void *srcData)
 {
   ManualContourMarkingData *data = static_cast<ManualContourMarkingData*>(srcData);
-  if (event == CV_EVENT_LBUTTONUP)
+  if (event == cv::EVENT_LBUTTONUP)
   {
     data->isLButtonPressed = false;
   }
 
-  if (event == CV_EVENT_LBUTTONDOWN)
+  if (event == cv::EVENT_LBUTTONDOWN)
   {
     data->isLButtonPressed = true;
   }

@@ -13,6 +13,8 @@
 #include "fdcm/fdcm.hpp"
 
 #include <opencv2/opencv.hpp>
+#include <opencv2/calib3d/calib3d_c.h>
+#include <opencv2/core/core_c.h>
 
 #include <limits>
 #include <string>
@@ -73,7 +75,7 @@ LocalPoseRefiner::LocalPoseRefiner(const EdgeModel &_edgeModel, const cv::Mat &_
   bgrImage = _bgrImage.clone();
   //TODO: experiment with color gradients
   Mat grayImage;
-  cvtColor(bgrImage, grayImage, CV_BGR2GRAY);
+  cvtColor(bgrImage, grayImage, cv::COLOR_BGR2GRAY);
   computeDerivatives(grayImage, bgrImageDx, bgrImageDy);
 }
 
@@ -143,7 +145,7 @@ void LocalPoseRefiner::computeDistanceTransform(const cv::Mat &edges, int distan
 {
   if(edges.empty())
   {
-    CV_Error(CV_HeaderIsNull, "edges are empty");
+    CV_Error(cv::Error::HeaderIsNull, "edges are empty");
   }
 
   distanceTransform(~edges, distanceImage, distanceType, distanceMask);
@@ -279,7 +281,7 @@ void LocalPoseRefiner::computeResidualsWithInliersMask(const cv::Mat &projectedP
 
   CV_Assert(residuals.cols == 1);
   Mat sortedIndices;
-  sortIdx(residuals, sortedIndices, CV_SORT_EVERY_COLUMN + CV_SORT_ASCENDING);
+  sortIdx(residuals, sortedIndices, cv::SORT_EVERY_COLUMN + cv::SORT_ASCENDING);
   int maxRow = cvRound(inliersRatio * residuals.rows);
   CV_Assert(0 < maxRow && maxRow <= residuals.rows);
   CV_Assert(sortedIndices.type() == CV_32SC1);
@@ -543,7 +545,8 @@ double LocalPoseRefiner::normalizeError(const PoseRT &pose_cam, double error) co
     camera.projectPoints(originalEdgeModel.points, pose_cam, projectedPoints);
 
     Mat covar, mean;
-    calcCovarMatrix(Mat(projectedPoints).reshape(1), covar, mean, CV_COVAR_NORMAL | CV_COVAR_SCALE | CV_COVAR_ROWS);
+    calcCovarMatrix(Mat(projectedPoints).reshape(1), covar, mean, 
+      cv::COVAR_NORMAL | cv::COVAR_SCALE | cv::COVAR_ROWS);
     //scale errors to ~1.0 scale
     double normalizationFactor = sqrt(determinant(covar));
     const double eps = 1e-4;
@@ -560,7 +563,7 @@ float LocalPoseRefiner::estimateOutlierError(const cv::Mat &distanceImage, int d
 
   switch (distanceType)
   {
-    case CV_DIST_L2:
+    case cv::DIST_L2:
         return sqrt(static_cast<float>(distanceImage.rows * distanceImage.rows +
                                        distanceImage.cols * distanceImage.cols));
     default:
@@ -587,7 +590,7 @@ void LocalPoseRefiner::computeWeights(const vector<Point2f> &projectedPointsVect
     return;
   }
   vector<vector<Point> > contours;
-  findContours(pointsMask, contours, CV_RETR_LIST, CV_CHAIN_APPROX_NONE);
+  findContours(pointsMask, contours, cv::RETR_LIST, cv::CHAIN_APPROX_NONE);
   Mat footprintImage(pointsMask.size(), CV_8UC1, Scalar(255));
   drawContours(footprintImage, contours, -1, Scalar(0));
 
@@ -1001,7 +1004,7 @@ float LocalPoseRefiner::refineUsingSilhouette(PoseRT &pose_cam, bool usePoseGues
 
   bool useObjectCoordinateSystem = !Rt_obj2cam_cached.empty();
   if(!useObjectCoordinateSystem)
-    CV_Error(CV_StsBadArg, "camera coordinate system is not supported");
+    CV_Error(cv::Error::StsBadArg, "camera coordinate system is not supported");
 
   Mat R_obj2cam, t_obj2cam;
   getRotationTranslation(Rt_obj2cam_cached, R_obj2cam, t_obj2cam);
@@ -1058,8 +1061,8 @@ float LocalPoseRefiner::refineUsingSilhouette(PoseRT &pose_cam, bool usePoseGues
     tvecParams = Mat::zeros(dim, 1, CV_64FC1);
   }
 
-  CvLevMarq solver(paramsCount, residualsCount, this->params.termCriteria);
-  CvMat paramsCvMat = params;
+  CvLevMarq solver(paramsCount, residualsCount, cvTermCriteria(this->params.termCriteria));
+  CvMat paramsCvMat = cvMat(params);
   cvCopy( &paramsCvMat, solver.param );
   //params and solver.params must use the same memory
 
@@ -1123,7 +1126,7 @@ float LocalPoseRefiner::refineUsingSilhouette(PoseRT &pose_cam, bool usePoseGues
       Mat J = surfaceJ.clone();
       J.push_back(silhouetteJ);
 
-      CvMat JcvMat = J;
+      CvMat JcvMat = cvMat(J);
       //cvCopy(&JcvMat, matJ);
       cvCopy(&JcvMat, solver.J);
     }
@@ -1158,7 +1161,7 @@ float LocalPoseRefiner::refineUsingSilhouette(PoseRT &pose_cam, bool usePoseGues
     displayProjection(projectedPoints, "points");
     displayProjection(projectedStableEdgels, "surface points");
 #endif
-    CvMat errCvMat = err;
+    CvMat errCvMat = cvMat(err);
     cvCopy( &errCvMat, _err);
     ++iter;
   }

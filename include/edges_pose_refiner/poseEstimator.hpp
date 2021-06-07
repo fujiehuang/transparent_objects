@@ -175,8 +175,8 @@ namespace transpod
       lmInitialParams.lmClosingIterationsCount = 5;
       lmFinalParams.lmDownFactor = 1.0f;
       lmFinalParams.lmClosingIterationsCount = 10;
-      lmJacobianCriteria = cv::TermCriteria(CV_TERMCRIT_ITER, 5, 0.0);
-      lmErrorCriteria = cv::TermCriteria(CV_TERMCRIT_ITER, 1, 0.0);
+      lmJacobianCriteria = cv::TermCriteria(cv::TermCriteria::MAX_ITER, 5, 0.0);
+      lmErrorCriteria = cv::TermCriteria(cv::TermCriteria::MAX_ITER, 1, 0.0);
     }
 
     void read(const cv::FileNode &fn);

@@ -39,8 +39,8 @@
 //TODO FIXME namespace this stuff...
 #include <vector>
 
-#include <opencv/cxcore.h>
-
+#include <opencv2/core.hpp>
+#include <opencv2/core/types_c.h>
 using namespace std;
 
 typedef pair<int, int> coordinate_t;

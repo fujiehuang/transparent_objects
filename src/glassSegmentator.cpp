@@ -31,7 +31,7 @@ void createMasksForGrabCut(const cv::Mat &objectMask,
 
   Mat tmpObjectMask = objectMask.clone();
   vector<vector<Point> > contours;
-  findContours(tmpObjectMask, contours, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_NONE);
+  findContours(tmpObjectMask, contours, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_NONE);
   allRois.clear();
   allRoiMasks.clear();
   for(size_t i = 0; i < contours.size(); ++i)
@@ -145,7 +145,7 @@ void refineGlassMaskByTableHull(const std::vector<cv::Point2f> &tableHull, cv::M
 
   vector<vector<Point> > contours;
   Mat copyGlassMask = glassMask.clone();
-  findContours(copyGlassMask, contours, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_NONE);
+  findContours(copyGlassMask, contours, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_NONE);
   for (size_t i = 0; i < contours.size(); ++i)
   {
     Moments moms = moments(contours[i]);
@@ -185,7 +185,7 @@ void GlassSegmentator::segment(const cv::Mat &bgrImage, const cv::Mat &depthMat,
   imshow("mask after openning", mask);
 #endif
   vector<vector<Point> > contours;
-  findContours(mask, contours, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_NONE);
+  findContours(mask, contours, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_NONE);
   numberOfComponents = static_cast<int>(contours.size());
 
   Mat glassImage(mask.size(), CV_8UC1, Scalar(0));
@@ -223,7 +223,7 @@ void GlassSegmentator::segment(const cv::Mat &bgrImage, const cv::Mat &depthMat,
 
     Mat tmpGlassMask = glassMask.clone();
     vector<vector<Point> > srcContours;
-    findContours(tmpGlassMask, srcContours, CV_RETR_LIST, CV_CHAIN_APPROX_NONE);
+    findContours(tmpGlassMask, srcContours, cv::RETR_LIST, cv::CHAIN_APPROX_NONE);
 
     for(size_t i = 0; i < srcContours.size(); ++i)
     {

@@ -76,7 +76,7 @@ int theta2Index(float theta, int directionsCount)
   {
     std::stringstream errorMessage;
     errorMessage << theta << " has invalid orIndex: " << orIndex << " / " << directionsCount;
-    CV_Error(CV_StsBadArg, errorMessage.str());
+    CV_Error(cv::Error::StsBadArg, errorMessage.str());
   }
   return orIndex;
 }
@@ -147,7 +147,7 @@ void computeNormals(const cv::Mat &edges, cv::Mat &normals, cv::Mat &orientation
 //  waitKey();
 
   Mat dt, labels;
-  distanceTransform(~linearMap, dt, labels, CV_DIST_L2, CV_DIST_MASK_PRECISE, DIST_LABEL_PIXEL);
+  distanceTransform(~linearMap, dt, labels, cv::DIST_L2, cv::DIST_MASK_PRECISE, DIST_LABEL_PIXEL);
 
   CV_Assert(linearMap.type() == CV_8UC1);
   CV_Assert(labels.type() == CV_32SC1);

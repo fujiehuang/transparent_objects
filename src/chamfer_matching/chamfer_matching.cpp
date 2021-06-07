@@ -38,9 +38,10 @@
 #include <queue>
 #include <algorithm>
 
-#include "opencv/cv.h"
-#include "opencv/highgui.h"
-
+#include <opencv2/opencv.hpp>
+#include <opencv2/highgui.hpp>
+#include <opencv2/core/core_c.h>
+#include <opencv2/highgui/highgui_c.h>
 #include "chamfer_matching/chamfer_matching.h"
 
 //#define DEBUG_CHAMFER_MATCHING
@@ -656,11 +657,11 @@ void ChamferTemplate::show() const
       p2.x = x + 10 * sin(orientations[i]);
       p2.y = y + 10 * cos(orientations[i]);
 
-      cvLine(templ_color, p1, p2, CV_RGB(255,0,0));
+      cvLine(templ_color, p1, p2, cvScalar(CV_RGB(255,0,0)));
     }
   }
 
-  cvCircle(templ_color, center, 1, CV_RGB(0,255,0));
+  cvCircle(templ_color, center, 1, cvScalar(CV_RGB(0,255,0)));
 
   cvNamedWindow("templ", 1);
   cvShowImage("templ", templ_color);

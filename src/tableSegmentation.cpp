@@ -313,7 +313,7 @@ void drawTable(const std::vector<cv::Point2f> &tableHull, cv::Mat &image,
     if (image.channels() == 1)
     {
         Mat drawImage;
-        cvtColor(image, drawImage, CV_GRAY2BGR);
+        cvtColor(image, drawImage, cv::COLOR_GRAY2BGR);
         image = drawImage;
     }
     CV_Assert(image.channels() == 3);

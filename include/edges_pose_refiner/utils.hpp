@@ -86,7 +86,7 @@ void drawPoints(const std::vector<cv::Point_<T> > &points, cv::Mat &image, cv::S
   if (image.channels() == 1)
   {
     cv::Mat colorImage;
-    cv::cvtColor(image, colorImage, CV_GRAY2BGR);
+    cv::cvtColor(image, colorImage, cv::COLOR_GRAY2BGR);
     image = colorImage;
   }
 

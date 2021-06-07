@@ -104,7 +104,7 @@ void PinholeCamera::write(const std::string &filename) const
   FileStorage fs(filename, FileStorage::WRITE);
   if(!fs.isOpened())
   {
-    CV_Error(CV_StsBadArg, "Cannot open pinhole camera file: " + filename);
+    CV_Error(cv::Error::StsBadArg, "Cannot open pinhole camera file: " + filename);
   }
   write(fs);
   fs.release();
@@ -129,7 +129,7 @@ void PinholeCamera::read(const std::string &filename)
   FileStorage fs(filename, FileStorage::READ);
   if(!fs.isOpened())
   {
-    CV_Error(CV_StsBadArg, "Cannot open pinhole camera file: " + filename);
+    CV_Error(cv::Error::StsBadArg, "Cannot open pinhole camera file: " + filename);
   }
 
   read(fs.root());

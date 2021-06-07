@@ -249,7 +249,7 @@ void PoseRT::read(const std::string &filename)
   FileStorage fs(filename, FileStorage::READ);
   if (!fs.isOpened())
   {
-    CV_Error(CV_StsBadArg, "cannot open the file " + filename);
+    CV_Error(cv::Error::StsBadArg, "cannot open the file " + filename);
   }
   read(fs.root());
   fs.release();

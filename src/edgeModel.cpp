@@ -296,7 +296,7 @@ static void computeDotProducts(const Mat &samples_1, const Mat &samples_2, Mat &
   CV_Assert(rowSamples_1.type() == rowSamples_2.type());
 
   Mat products = rowSamples_1.mul(rowSamples_2);
-  reduce(products, dotProducts, 1, CV_REDUCE_SUM);
+  reduce(products, dotProducts, 1, cv::REDUCE_SUM);
 }
 
 static void computeCosinesWithNormals(const EdgeModel &edgeModel, const PoseRT &pose, Mat &cosines, cv::Mat *jacobian = 0)
@@ -502,7 +502,7 @@ void EdgeModel::computeFootprint(const std::vector<cv::Point2f> &points, const c
 #endif
 
   vector<vector<Point> > contours;
-  findContours(projectedPointsROI, contours, CV_RETR_LIST, CV_CHAIN_APPROX_NONE);
+  findContours(projectedPointsROI, contours, cv::RETR_LIST, cv::CHAIN_APPROX_NONE);
   if(contours.empty())
   {
     return;
@@ -705,7 +705,7 @@ void EdgeModel::read(const std::string &filename)
   FileStorage edgeModelFS(filename, FileStorage::READ);
   if(!edgeModelFS.isOpened())
   {
-    CV_Error(CV_StsBadArg, "Cannot open a file " + filename);
+    CV_Error(cv::Error::StsBadArg, "Cannot open a file " + filename);
   }
 
   read(edgeModelFS.root());
@@ -823,7 +823,7 @@ bool EdgeModel::isAxisCorrect(const std::vector<cv::Point3f> &points, cv::Point3
 
 void computeObjectSystem(const std::vector<cv::Point3f> &points, cv::Mat &Rt_obj2cam)
 {
-  PCA pca(Mat(points).reshape(1), Mat(), CV_PCA_DATA_AS_ROW);
+  PCA pca(Mat(points).reshape(1), Mat(), PCA::DATA_AS_ROW);
 
   Mat R_obj2cam, t_obj2cam;
   pca.eigenvectors.convertTo(R_obj2cam, CV_64FC1);

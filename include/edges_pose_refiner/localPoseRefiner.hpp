@@ -44,8 +44,8 @@ struct LocalPoseRefinerParams
 
   LocalPoseRefinerParams()
   {
-    distanceType = CV_DIST_L2;
-    distanceMask = CV_DIST_MASK_PRECISE;
+    distanceType = cv::DIST_L2;
+    distanceMask = cv::DIST_MASK_PRECISE;
 
     lmDownFactor = 1.0f;
     lmClosingIterationsCount = 10;

@@ -9,7 +9,8 @@
 #include "edges_pose_refiner/utils.hpp"
 #include "edges_pose_refiner/edgeModel.hpp"
 #include <opencv2/opencv.hpp>
-
+#include <opencv2/core/types_c.h>
+#include <opencv2/video/tracking.hpp>
 #include <vector>
 
 using namespace cv;
@@ -331,7 +332,7 @@ float estimateScale(const Mat &src, const Mat &transformationMatrix)
   Mat transformedPoints;
   transform(src, transformedPoints, transformationMatrix);
   Mat covar, mean;
-  calcCovarMatrix(transformedPoints.reshape(1), covar, mean, CV_COVAR_NORMAL + CV_COVAR_SCALE + CV_COVAR_ROWS);
+  calcCovarMatrix(transformedPoints.reshape(1), covar, mean, cv::COVAR_NORMAL + cv::COVAR_SCALE + cv::COVAR_ROWS);
   return determinant(covar);
 }
 
@@ -371,15 +372,17 @@ void Silhouette::findSimilarityTransformation(const cv::Mat &src, const cv::Mat 
     CV_Assert(correspondingPoints.channels() == 2);
     CV_Assert(srcTwoChannels.type() == correspondingPoints.type());
     Mat currentTransformationMatrix = Mat::zeros(2, 3, CV_64FC1);
-    //currentTransformationMatrix = estimateRigidTransform(srcTwoChannels, correspondingPoints, isFullAffine);
-
-    CvMat matA = srcTwoChannels, matB = correspondingPoints, matM = currentTransformationMatrix;
+    
+    currentTransformationMatrix = estimateAffinePartial2D(srcTwoChannels, correspondingPoints);
+    // can this function fail?  the following C API version is missing in OpenCV4...
+    /*
+    CvMat matA = cvMat(srcTwoChannels), matB = cvMat(correspondingPoints), matM = cvMat(currentTransformationMatrix);
     bool isTransformEstimated = cvEstimateRigidTransform(&matA, &matB, &matM, isFullAffine );
     if (!isTransformEstimated)
     {
       break;
     }
-
+    */
     Mat composedTransformation;
     composeAffineTransformations(transformationMatrix, currentTransformationMatrix, composedTransformation);
     transformationMatrix = composedTransformation;

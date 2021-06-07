@@ -106,7 +106,7 @@ namespace transparent_objects
       std::vector<float> posesQualities;
       std::vector<std::string> detectedObjects;
 
-      cv::Mat registrationMask = cv::imread(*registrationMaskFilename_, CV_LOAD_IMAGE_GRAYSCALE);
+      cv::Mat registrationMask = cv::imread(*registrationMaskFilename_, cv::IMREAD_GRAYSCALE);
       transpod::Detector::DebugInfo debugInfo;
       try
       {

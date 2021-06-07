@@ -81,7 +81,7 @@ void Detector::addTrainObject(const std::string &objectName, const PoseEstimator
   result = poseEstimators.insert(std::make_pair(objectName, estimator));
   if (!result.second)
   {
-    CV_Error(CV_StsBadArg, "Object name '" + objectName + "' is not unique");
+    CV_Error(cv::Error::StsBadArg, "Object name '" + objectName + "' is not unique");
   }
 }
 
@@ -130,7 +130,7 @@ void reconstructCollisionMap(const PinholeCamera &validTestCamera,
 
   Mat dt;
   //TODO: move up
-  distanceTransform(~objectMask, dt, CV_DIST_L2, CV_DIST_MASK_PRECISE);
+  distanceTransform(~objectMask, dt, cv::DIST_L2, cv::DIST_MASK_PRECISE);
 
   //TODO: this assumption is incorrect if you have a small object behing a large object
   Mat objectSilhouettePointsMask(glassContourPoints.size(), 1, CV_8UC1, Scalar(0));
@@ -347,7 +347,7 @@ void Detector::detect(const cv::Mat &srcBgrImage, const cv::Mat &srcDepth, const
     std::stringstream error;
     error << "RGB resolution is " << bgrImage.cols << "x" << bgrImage.rows;
     error << ", but valid resolution is " << validTestImageSize.width << "x" << validTestImageSize.height;
-    CV_Error(CV_StsBadArg, error.str());
+    CV_Error(cv::Error::StsBadArg, error.str());
   }
   CV_Assert(bgrImage.size() == validTestImageSize);
   CV_Assert(depth.size() == validTestImageSize);
@@ -388,7 +388,7 @@ void Detector::detect(const cv::Mat &srcBgrImage, const cv::Mat &srcDepth, const
 
   if (!isEstimated)
   {
-    CV_Error(CV_StsOk, "Cannot find a table plane");
+    CV_Error(cv::Error::StsOk, "Cannot find a table plane");
   }
 
 #ifdef VERBOSE
@@ -433,7 +433,7 @@ void Detector::detect(const cv::Mat &srcBgrImage, const cv::Mat &srcDepth, const
 #endif
   if (numberOfComponents == 0)
   {
-    CV_Error(CV_StsOk, "Cannot segment a transparent object");
+    CV_Error(cv::Error::StsOk, "Cannot segment a transparent object");
   }
 
 #ifdef VISUALIZE_DETECTION

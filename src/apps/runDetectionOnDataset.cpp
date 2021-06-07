@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
         int returnCode = std::system(mkdirCommand.c_str());
         if (returnCode != 0)
         {
-            CV_Error(CV_StsBadArg, "Cannot create the results folder: " + visualizationPath);
+            CV_Error(cv::Error::StsBadArg, "Cannot create the results folder: " + visualizationPath);
         }
     }
 
@@ -177,7 +177,7 @@ int main(int argc, char *argv[])
         bool isSuccess = imwrite(detectionFilename, detectionImage);
         if (!isSuccess)
         {
-            CV_Error(CV_StsBadArg, "Cannot write to " + detectionFilename);
+            CV_Error(cv::Error::StsBadArg, "Cannot write to " + detectionFilename);
         }
 #endif
 
@@ -190,7 +190,7 @@ int main(int argc, char *argv[])
         std::ofstream fout(qualitiesFilename.c_str());
         if (!fout.is_open())
         {
-            CV_Error(CV_StsBadArg, "Cannot write to " + qualitiesFilename);
+            CV_Error(cv::Error::StsBadArg, "Cannot write to " + qualitiesFilename);
         }
         for(size_t _testIdx = 0; _testIdx < testIndices.size(); ++_testIdx)
         {

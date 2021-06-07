@@ -337,7 +337,7 @@ namespace transpod
   void PoseEstimator::computeCentralEdges(const Mat &centralBgrImage, const Mat &glassMask, Mat &centralEdges, Mat &silhouetteEdges) const
   {
     Mat centralGrayImage;
-    cvtColor(centralBgrImage, centralGrayImage, CV_BGR2GRAY);
+    cvtColor(centralBgrImage, centralGrayImage, cv::COLOR_BGR2GRAY);
     Canny(centralGrayImage, centralEdges, params.cannyThreshold1, params.cannyThreshold2);
   #ifdef VISUALIZE_INITIAL_POSE_REFINEMENT
     imshow("central edges before", centralEdges);
@@ -351,7 +351,7 @@ namespace transpod
   #endif
     Mat glassMaskClone = glassMask.clone();
     vector<vector<Point> > glassMaskContours;
-    findContours(glassMaskClone, glassMaskContours, CV_RETR_LIST, CV_CHAIN_APPROX_NONE);
+    findContours(glassMaskClone, glassMaskContours, cv::RETR_LIST, cv::CHAIN_APPROX_NONE);
     drawContours(centralEdges, glassMaskContours, -1, Scalar(255));
     silhouetteEdges = Mat(glassMask.size(), CV_8UC1, Scalar(0));
     drawContours(silhouetteEdges, glassMaskContours, -1, Scalar(255));
@@ -641,7 +641,7 @@ namespace transpod
 
     Mat maskClone = glassMask.clone();
     vector<vector<Point> > allGlassContours;
-    findContours(maskClone, allGlassContours, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_NONE);
+    findContours(maskClone, allGlassContours, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_NONE);
 
 #ifdef VERBOSE
     cout << "Number of glass contours: " << allGlassContours.size() << endl;
