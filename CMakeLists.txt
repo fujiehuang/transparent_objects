@@ -21,7 +21,7 @@ else()
     set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 endif()
 
-find_package(Boost REQUIRED program_options signals)
+find_package(Boost REQUIRED program_options thread)
 find_package(OpenCV REQUIRED)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
